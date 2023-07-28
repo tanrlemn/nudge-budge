@@ -9,13 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< Updated upstream
-    "eslint": "8.45.0",
-    "eslint-config-next": "13.4.11",
-    "next": "13.4.11",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
-=======
     "@auth/supabase-adapter": "^0.1.2",
     "@netlify/plugin-nextjs": "^4.39.1",
     "@supabase/auth-helpers-nextjs": "^0.7.3",
@@ -35,6 +28,5 @@
   "devDependencies": {
     "encoding": "^0.1.13",
     "eslint": "^8.45.0"
->>>>>>> Stashed changes
   }
 }
