@@ -8,9 +8,6 @@ const nextConfig = {
     PLAID_COUNTRY_CODES: process.env.PLAID_COUNTRY_CODES,
     PLAID_REDIRECT_URI: process.env.PLAID_REDIRECT_URI,
   },
-  experimental: {
-    serverActions: true,
-  },
 };
 
 module.exports = nextConfig;

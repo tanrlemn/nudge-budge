@@ -5,6 +5,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 
 const inter = Inter({ subsets: ['latin'] });
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Nudge & Budge',
