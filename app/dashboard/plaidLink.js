@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { usePlaidLink } from 'react-plaid-link';
 
-export default function PlaidLink() {
+export default function PlaidLink({ session }) {
   const [token, setToken] = useState(null);
   const router = useRouter();
 
@@ -19,15 +19,22 @@ export default function PlaidLink() {
     createLinkToken();
   }, []);
 
+  useEffect(() => {
+    if (token) {
+      console.log('token', token);
+    }
+  }, [token]);
+
   const onSuccess = useCallback(async (publicToken) => {
     await fetch('/api/exchangePublicToken', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ public_token: publicToken }),
+      body: JSON.stringify({ public_token: publicToken, session: session }),
     });
-    router.push('/dashboard');
+
+    router.refresh();
   }, []);
 
   const { open, ready } = usePlaidLink({
@@ -39,7 +46,7 @@ export default function PlaidLink() {
     <button
       onClick={() => open()}
       disabled={!ready}>
-      <strong>Link account</strong>
+      <strong>Link a bank account</strong>
     </button>
   );
 }

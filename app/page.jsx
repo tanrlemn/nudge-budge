@@ -11,15 +11,13 @@ export default async function Home() {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session) {
-    redirect('/unauthenticated');
+  if (session !== null) {
+    redirect('/dashboard');
   }
 
-  const { data } = await supabase.from('todos').select();
   return (
     <>
-      <h1>Hello, {session.user.email}</h1>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <h1>NudgeBudge</h1>
     </>
   );
 }

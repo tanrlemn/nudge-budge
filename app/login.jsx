@@ -1,9 +1,10 @@
 'use client';
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
-export default function Login({ session }) {
+export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
@@ -28,31 +29,23 @@ export default function Login({ session }) {
     router.refresh();
   };
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-  };
-
   return (
     <>
-      {!session && (
-        <div>
-          <input
-            name='email'
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-          />
-          <input
-            type='password'
-            name='password'
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-          <button onClick={handleSignIn}>Sign in</button>
-          <button onClick={handleSignUp}>Sign up</button>
-        </div>
-      )}
-      {session && <button onClick={handleSignOut}>Sign out</button>}
+      <div>
+        <input
+          name='email'
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+        />
+        <input
+          type='password'
+          name='password'
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+        />
+        <button onClick={handleSignIn}>Sign in</button>
+        <button onClick={handleSignUp}>Sign up</button>
+      </div>
     </>
   );
 }
