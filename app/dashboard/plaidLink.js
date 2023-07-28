@@ -26,7 +26,7 @@ export default function PlaidLink({ session }) {
   }, [token]);
 
   const onSuccess = useCallback(async (publicToken) => {
-    const response = await fetch('/api/exchangePublicToken', {
+    await fetch('/api/exchangePublicToken', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

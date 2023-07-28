@@ -21,6 +21,7 @@ export default async function Dashboard() {
     <>
       <h1>Hello, {session.user.email}</h1>
       <pre>{JSON.stringify(data[0], null, 2)}</pre>
+
       <Transactions
         session={session}
         plaid_items={plaid_items}
