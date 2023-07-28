@@ -1,0 +1,11 @@
+.columnHeader {
+  color: var(--gray-mid-light);
+}
+
+.green {
+  color: var(--green);
+}
+
+.red {
+  color: var(--red);
+}
