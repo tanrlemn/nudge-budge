@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-export default function Transactions({ plaid_items, session }) {
+export default function PlaidTransactions({ plaid_items }) {
   const [transactions, setTransactions] = useState(null);
 
   useEffect(() => {
@@ -15,13 +15,11 @@ export default function Transactions({ plaid_items, session }) {
         body: JSON.stringify({ access_token: access_token }),
       });
       const { transactions } = await response.json();
-      console.log(transactions);
 
       return transactions;
     };
 
     if (plaid_items && transactions === null) {
-      console.log('plaid_items', plaid_items);
       plaid_items.map(async (item) => {
         console.log('item', item);
         const access_token = item.access_token;
@@ -38,17 +36,15 @@ export default function Transactions({ plaid_items, session }) {
         <>
           {transactions.map((item) => {
             return (
-              <div>
-                <div>
-                  <p>{item.name}</p>
-                  <p>
-                    {new Intl.NumberFormat('en-US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    }).format(item.amount)}
-                  </p>
-                  <p>{new Date(item.date).toDateString()}</p>
-                </div>
+              <div key={item.transaction_id}>
+                <p>{item.name}</p>
+                <p>
+                  {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  }).format(item.amount)}
+                </p>
+                <p>{new Date(item.date).toDateString()}</p>
               </div>
             );
           })}

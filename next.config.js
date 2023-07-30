@@ -8,6 +8,16 @@ const nextConfig = {
     PLAID_COUNTRY_CODES: process.env.PLAID_COUNTRY_CODES,
     PLAID_REDIRECT_URI: process.env.PLAID_REDIRECT_URI,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'szvcvyiiqtirmirzoair.supabase.co',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

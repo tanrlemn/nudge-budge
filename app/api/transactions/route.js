@@ -12,6 +12,5 @@ export async function POST(request) {
   });
 
   const transactions = response.data.added;
-  console.log(transactions);
   return NextResponse.json({ transactions });
 }

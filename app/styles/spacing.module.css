@@ -10,8 +10,30 @@
   padding: 2rem;
 }
 
+.marginRightXs {
+  margin-right: 0.5rem;
+}
+
 .marginRightSm {
   margin-right: 1rem;
+}
+
+.marginBottomXxs {
+  margin-bottom: 0.2rem;
+}
+
+.marginBottomXs {
+  margin-bottom: 0.5rem;
+}
+
+.marginBottomSm {
+  margin-bottom: 1rem;
+}
+
+.mainWrap {
+  width: 100%;
+  padding: 2rem;
+  margin-top: 1rem;
 }
 
 .icon {

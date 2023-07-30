@@ -12,7 +12,7 @@
   --red: #ff6853;
 
   /* Oranges */
-  --orage: #ff994d;
+  --orange: #ff994d;
 
   /* Yellows */
   --yellow: #ffc515;
@@ -28,6 +28,7 @@
 
   /* Borders */
   --gray-border-sm: 1px solid var(--gray-dark);
+  --gray-mid-border-sm: 1px solid var(--gray-mid);
 
   --green-border-sm: 1px solid var(--green);
 
