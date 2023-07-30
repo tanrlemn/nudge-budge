@@ -3,13 +3,33 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-  padding: 0.5rem;
+  padding: 2rem;
+  max-width: 550px;
   margin-top: 1rem;
+}
+
+.smallBalanceWrap {
+  display: flex;
+  flex-flow: column;
+
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
 }
 
 .envelopesHeaderWrap {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.2rem;
+  margin-bottom: 1rem;
+  border-bottom: var(--gray-border-sm);
+  padding-bottom: 0.5rem;
+}
+
+.envelopesColumnHeaders {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  border-bottom: var(--gray-border-sm);
+  padding-bottom: 0.5rem;
 }

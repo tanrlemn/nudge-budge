@@ -21,7 +21,6 @@ export default function PlaidLink({ session }) {
 
   useEffect(() => {
     if (token) {
-      console.log('token', token);
     }
   }, [token]);
 

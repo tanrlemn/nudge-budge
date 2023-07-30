@@ -44,3 +44,8 @@
   height: 1rem;
   margin-right: 0.2rem;
 }
+
+.grid {
+  border-bottom: 'var(--gray-border-sm)';
+  margin-bottom: 1rem;
+}

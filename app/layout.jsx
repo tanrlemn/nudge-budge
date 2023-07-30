@@ -1,8 +1,13 @@
+// styles
 import './globals.css';
-import { Inter } from 'next/font/google';
+import { githubTheme } from './styles/theme';
+import { CssVarsProvider } from '@mui/joy/styles';
+import { Public_Sans } from 'next/font/google';
+
+// components
 import Header from './components/header';
 
-const inter = Inter({ subsets: ['latin'] });
+const publicSans = Public_Sans({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'NudgeBudge',
@@ -11,11 +16,15 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   return (
-    <html lang='en'>
-      <body className={inter.className}>
-        <Header />
-        {children}
-      </body>
-    </html>
+    <CssVarsProvider
+      theme={githubTheme}
+      defaultMode='dark'>
+      <html lang='en'>
+        <body className={publicSans.className}>
+          <Header />
+          {children}
+        </body>
+      </html>
+    </CssVarsProvider>
   );
 }

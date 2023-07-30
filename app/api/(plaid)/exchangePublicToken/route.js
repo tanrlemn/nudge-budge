@@ -26,7 +26,6 @@ export async function POST(request) {
           .eq('user_id', session.user.id);
         return data[0].plaid_items;
       };
-      console.log('plaid_items', await plaid_items());
 
       const updatedPlaidItems = async () => {
         const items = await plaid_items();
@@ -44,9 +43,6 @@ export async function POST(request) {
         })
         .eq('user_id', session.user.id)
         .select();
-
-      console.log('data', data);
-      console.log('itemId', itemId);
 
       return NextResponse.json({ data, itemId, accessToken });
     }

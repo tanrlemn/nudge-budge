@@ -7,6 +7,7 @@
   --gray-dark: #2b2b32;
   --gray-mid: #9999a9;
   --gray-mid-light: #bdbdc8;
+  --gray-light: #e2e2f2;
 
   /* Reds */
   --red: #ff6853;
@@ -21,8 +22,10 @@
   --green: #00ff00;
 
   /* Blues */
+  --blue: #1969ff;
 
   /* Purples */
+  --purple: #9426fb;
 
   /* Pinks */
 
@@ -33,11 +36,6 @@
   --green-border-sm: 1px solid var(--green);
 
   --red-border-sm: 1px solid var(--red);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-  }
 }
 
 * {
@@ -55,15 +53,10 @@ body {
 
 body {
   background: var(--gray-darkest);
+  color: var(--gray-light);
 }
 
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }

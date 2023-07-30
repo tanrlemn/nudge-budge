@@ -1,4 +1,4 @@
-import { plaidClient, sessionOptions } from '../../lib/plaid';
+import { plaidClient, sessionOptions } from '../../../lib/plaid';
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {

@@ -13,8 +13,8 @@ export async function GET() {
     return NextResponse.redirect('/');
   }
 
-  const { data } = await supabase.from('envelopes').select();
+  const { data, error } = await supabase.from('envelopes').select();
 
   const envelopes = data;
-  return NextResponse.json({ envelopes });
+  return NextResponse.json({ envelopes, error });
 }

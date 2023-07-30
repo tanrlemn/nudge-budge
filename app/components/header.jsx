@@ -11,6 +11,7 @@ import Link from 'next/link';
 
 // local components
 import Auth from './handleAuth';
+import ModeToggle from './modeToggle';
 
 export default async function Header() {
   const supabase = createServerComponentClient({ cookies });
@@ -19,7 +20,6 @@ export default async function Header() {
   } = await supabase.auth.getSession();
 
   const { data } = await supabase.from('profiles').select();
-  console.log(data);
   const profileData = data !== null ? data[0] : null;
 
   return (
@@ -28,6 +28,7 @@ export default async function Header() {
         <div>NudgeBudge</div>
       </Link>
       <div className={styles.headerButtonsWrap}>
+        {/* <ModeToggle /> */}
         {session !== null && profileData !== null && (
           <Link
             href={'/dashboard'}

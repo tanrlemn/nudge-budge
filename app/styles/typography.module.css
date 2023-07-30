@@ -6,6 +6,47 @@
   color: var(--red);
 }
 
+.headingXxs {
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: var(--gray-light);
+}
+
+.headingXs {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--gray-light);
+}
+
+.headingSm {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--gray-light);
+}
+
+.headingSmAlt {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--gray-light);
+}
+
+.headingMd {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--gray-light);
+}
+
+.headingLg {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--gray-light);
+}
+.paragraphSm {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--gray-light);
+}
+
 .input {
   padding: 1rem;
   border-radius: 5px;
@@ -62,4 +103,32 @@
 
 .headerButtonYellow:hover {
   background-color: var(--orange);
+}
+
+.addIcon {
+  background-color: var(--purple);
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.addIcon:hover {
+  background-color: var(--blue);
+}
+
+.editIcon {
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.editIcon:hover {
+  background-color: var(--gray-dark);
 }

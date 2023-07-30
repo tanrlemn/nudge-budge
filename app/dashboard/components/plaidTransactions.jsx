@@ -21,7 +21,6 @@ export default function PlaidTransactions({ plaid_items }) {
 
     if (plaid_items && transactions === null) {
       plaid_items.map(async (item) => {
-        console.log('item', item);
         const access_token = item.access_token;
         const itemTransactions = await fetchTransactions(access_token);
         setTransactions(await itemTransactions);

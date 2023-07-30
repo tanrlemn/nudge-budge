@@ -10,6 +10,10 @@
   },
   "dependencies": {
     "@auth/supabase-adapter": "^0.1.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/public-sans": "^5.0.5",
+    "@mui/joy": "^5.0.0-alpha.89",
     "@netlify/plugin-nextjs": "^4.39.1",
     "@supabase/auth-helpers-nextjs": "^0.7.3",
     "@supabase/supabase-js": "^2.31.0",
