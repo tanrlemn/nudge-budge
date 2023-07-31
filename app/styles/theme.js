@@ -2,50 +2,7 @@
 
 import { extendTheme } from '@mui/joy/styles';
 
-export const githubTheme = extendTheme({
-  colorSchemes: {
-    light: {
-      palette: {
-        primary: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          // 300, 400, ..., 800,
-          900: '#78350f',
-        },
-        background: {
-          default: 'var(--gray-darkest)',
-          dark: 'var(--gray-dark)',
-          mid: 'var(--gray-mid)',
-          midLight: 'var(--gray-mid-light)',
-          light: 'var(--gray-light)',
-        },
-      },
-    },
-    dark: {
-      palette: {
-        success: {
-          solidBg: '#2DA44E',
-          solidHoverBg: '#2C974B',
-          solidActiveBg: '#298E46',
-        },
-        neutral: {
-          outlinedBg: '#F6F8FA',
-          outlinedHoverBg: '#F3F4F6',
-          outlinedActiveBg: 'rgba(238, 239, 242, 1)',
-          outlinedBorder: 'rgba(27, 31, 36, 0.15)',
-        },
-        focusVisible: 'rgba(3, 102, 214, 0.3)',
-        background: {
-          default: 'var(--gray-darkest)',
-          dark: 'var(--gray-dark)',
-          mid: 'var(--gray-mid)',
-          midLight: 'var(--gray-mid-light)',
-          light: 'var(--gray-light)',
-        },
-      },
-    },
-  },
+export const nudgeBudgeTheme = extendTheme({
   spacing: (factor) => `${0.25 * factor}rem`,
   focus: {
     default: {

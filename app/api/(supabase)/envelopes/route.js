@@ -13,7 +13,10 @@ export async function GET() {
     return NextResponse.redirect('/');
   }
 
-  const { data, error } = await supabase.from('envelopes').select();
+  const { data, error } = await supabase
+    .from('envelopes')
+    .select()
+    .order('priority_id', { ascending: false });
 
   const envelopes = data;
   return NextResponse.json({ envelopes, error });

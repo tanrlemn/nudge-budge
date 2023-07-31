@@ -10,6 +10,18 @@
   padding: 2rem;
 }
 
+.marginTopBottomXxs {
+  margin: 0.2rem 0;
+}
+
+.marginTopBottomXs {
+  margin: 0.5rem 0;
+}
+
+.marginTopBottomSm {
+  margin: 1rem 0;
+}
+
 .marginRightXs {
   margin-right: 0.5rem;
 }
@@ -28,6 +40,18 @@
 
 .marginBottomSm {
   margin-bottom: 1rem;
+}
+
+.marginBottomMd {
+  margin-bottom: 1.5rem;
+}
+
+.marginBottomLg {
+  margin-bottom: 2rem;
+}
+
+.marginBottomXl {
+  margin-bottom: 2.5rem;
 }
 
 .mainWrap {

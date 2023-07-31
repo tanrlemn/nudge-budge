@@ -20,6 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   margin-bottom: 1rem;
   border-bottom: var(--gray-border-sm);
   padding-bottom: 0.5rem;
@@ -32,4 +33,11 @@
   margin-bottom: 1rem;
   border-bottom: var(--gray-border-sm);
   padding-bottom: 0.5rem;
+}
+
+.linkButtonWrap {
+  max-width: 35%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-end;
 }

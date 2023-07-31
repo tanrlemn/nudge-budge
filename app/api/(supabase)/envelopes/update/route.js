@@ -4,11 +4,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   const req = await request.json();
-  const { name, amount, notes, priority_id } = req;
-
-  console.log(req);
-
-  const now = new Date();
+  const { name, amount, notes, priority_id, id } = req;
 
   const supabase = createRouteHandlerClient({ cookies });
 
@@ -22,9 +18,8 @@ export async function POST(request) {
 
   const { data, error } = await supabase
     .from('envelopes')
-    .insert([
+    .update([
       {
-        created_at: now,
         name: name,
         amount: amount,
         amount_left: amount,
@@ -34,6 +29,7 @@ export async function POST(request) {
         priority_id: priority_id,
       },
     ])
+    .eq('id', id)
     .select();
 
   const envelope = data;

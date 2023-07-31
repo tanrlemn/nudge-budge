@@ -1,6 +1,6 @@
 // styles
 import './globals.css';
-import { githubTheme } from './styles/theme';
+import { nudgeBudgeTheme } from './styles/theme';
 import { CssVarsProvider } from '@mui/joy/styles';
 import { Public_Sans } from 'next/font/google';
 
@@ -17,7 +17,7 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   return (
     <CssVarsProvider
-      theme={githubTheme}
+      theme={nudgeBudgeTheme}
       defaultMode='dark'>
       <html lang='en'>
         <body className={publicSans.className}>

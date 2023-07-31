@@ -8,25 +8,21 @@ import { styled } from '@mui/joy/styles';
 
 // hooks
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 // components
-import { MdAdd, MdEdit } from 'react-icons/md';
+import { MdAdd } from 'react-icons/md';
 import {
   Skeleton,
-  Modal,
   Grid,
   Sheet,
   Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Textarea,
-  ModalDialog,
-  Stack,
   Typography,
-  Link,
+  Chip,
+  ChipDelete,
 } from '@mui/joy';
+import CreateEnvelopeModal from './createEnvelopeModal';
+import PriorityGroup from './priorityGroup';
 
 const Item = styled(Sheet)(({ theme }) => ({
   backgroundColor: 'transparent',
@@ -42,23 +38,18 @@ const Container = styled(Grid)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
-const EnvelopeForm = styled(ModalDialog)(({ theme }) => ({
-  backgroundColor: 'var(--gray-dark)',
-  padding: theme.spacing(9),
-}));
-
-const CancelButton = styled(Link)(({ theme }) => ({
-  textAlign: 'center',
-  width: '100%',
-  display: 'block',
-  color: theme.vars.palette.danger.main,
-}));
-
 export default function Envelopes() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const priority = searchParams.get('priority');
+  const [currentPriorityGroup, setCurrentPriorityGroup] = useState(null);
+  const [priorityColor, setPriorityColor] = useState(null);
+  const [allPriorityGroups, setAllPriorityGroups] = useState(null);
 
   const [envelopes, setEnvelopes] = useState(null);
+  const [updateProps, setUpdateProps] = useState(null);
   const [envelopesBalance, setEnvelopesBalance] = useState(0);
+
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [newEnvelope, setNewEnvelope] = useState(null);
@@ -77,34 +68,86 @@ export default function Envelopes() {
       setEnvelopes(await envelopes);
     };
 
-    const calculateEnvelopesBalance = () => {
-      let balance = 0;
+    const disperseEnvelopes = () => {
+      const necessitiesArr = [];
+      const pressingArr = [];
+      const savingsArr = [];
+      const discretionaryArr = [];
+      const incomeArr = [];
+
       envelopes.map((item) => {
-        balance += item.amount;
+        if (item.priority_id === 4) {
+          savingsArr.push(item);
+        } else if (item.priority_id === 1) {
+          necessitiesArr.push(item);
+        } else if (item.priority_id === 2) {
+          pressingArr.push(item);
+        } else if (item.priority_id === 3) {
+          discretionaryArr.push(item);
+        } else if (item.priority_id === 5) {
+          incomeArr.push(item);
+        }
       });
-      setEnvelopesBalance(balance);
+
+      if (priority === null) {
+        setPriorityColor(null);
+        setCurrentPriorityGroup(null);
+        calculateEnvelopesBalance();
+      } else if (priority === 'savings') {
+        setPriorityColor('info');
+        setCurrentPriorityGroup(savingsArr);
+        calculateEnvelopesBalance(savingsArr);
+      } else if (priority === 'necessities') {
+        setPriorityColor('danger');
+        setCurrentPriorityGroup(necessitiesArr);
+        calculateEnvelopesBalance(necessitiesArr);
+      } else if (priority === 'pressing') {
+        setPriorityColor('warning');
+        setCurrentPriorityGroup(pressingArr);
+        calculateEnvelopesBalance(pressingArr);
+      } else if (priority === 'discretionary') {
+        setPriorityColor('primary');
+        setCurrentPriorityGroup(discretionaryArr);
+        calculateEnvelopesBalance(discretionaryArr);
+      } else if (priority === 'income') {
+        setPriorityColor('success');
+        setCurrentPriorityGroup(incomeArr);
+        calculateEnvelopesBalance(incomeArr);
+      }
+
+      setAllPriorityGroups([
+        { group: savingsArr, color: 'info', groupName: 'Savings' },
+        {
+          group: necessitiesArr,
+          color: 'danger',
+          groupName: 'Necessities',
+        },
+        {
+          group: pressingArr,
+          color: 'warning',
+          groupName: 'Pressing',
+        },
+        {
+          group: discretionaryArr,
+          color: 'primary',
+          groupName: 'Discretionary',
+        },
+        { group: incomeArr, color: 'success', groupName: 'Income' },
+      ]);
     };
 
-    const handleNewEnvelope = async () => {
-      setLoading(true);
-      const response = await fetch('/api/envelopes/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newEnvelope),
-      });
-      const { envelope } = await response.json();
-
-      if (envelope !== null) {
-        console.log(envelope);
-        setEnvelopes([...envelopes, envelope[0]]);
+    const calculateEnvelopesBalance = (group) => {
+      let balance = 0;
+      if (!group) {
+        envelopes.map((item) => {
+          balance += item.amount;
+        });
+      } else {
+        group.map((item) => {
+          balance += item.amount;
+        });
       }
-      setOpen(false);
-      setLoading(false);
-      setSubmitting(false);
-
-      router.refresh();
+      setEnvelopesBalance(balance);
     };
 
     if (envelopes === null) {
@@ -112,157 +155,88 @@ export default function Envelopes() {
     }
 
     if (envelopes !== null) {
-      calculateEnvelopesBalance();
+      disperseEnvelopes();
       setLoading(false);
     }
-
-    if (newEnvelope !== null && submitting) {
-      handleNewEnvelope();
-    }
-  }, [envelopes, submitting, newEnvelope]);
+  }, [envelopes, submitting, newEnvelope, priority]);
 
   return (
     <div>
+      {priority !== null && (
+        <div className={spacingStyles.marginBottomSm}>
+          <Chip
+            variant='outlined'
+            color={priorityColor}
+            onClick={() => router.push('/dashboard/envelopes')}
+            endDecorator={
+              <ChipDelete onClick={() => router.push('/dashboard/envelopes')} />
+            }>
+            {priority.charAt(0).toUpperCase() + priority.slice(1)}
+          </Chip>
+        </div>
+      )}
       <div className={styles.envelopesHeaderWrap}>
         <div className={styles.smallBalanceWrap}>
           <div className={spacingStyles.marginBottomXxs}>
             <Skeleton
               loading={loading}
               variant='text'
-              level='h2'>
-              <h2 className={textStyles.headingLg}>Envelopes</h2>
+              level='h1'>
+              <Typography level='h3'>
+                {priority === null
+                  ? 'All Envelopes'
+                  : priority.charAt(0).toUpperCase() + priority.slice(1)}
+              </Typography>
             </Skeleton>
           </div>
           <Skeleton
             loading={loading}
             variant='text'
-            level='body1'>
+            level='h2'>
             {!loading && (
-              <p className={textStyles.smallBalance}>
-                Balance for all envelopes:{' '}
-                {new Intl.NumberFormat('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-                }).format(envelopesBalance)}
-              </p>
+              <>
+                <Typography
+                  level='body2'
+                  gutterBottom={true}>
+                  Total budget for{' '}
+                  {priority === null
+                    ? ' all envelopes'
+                    : priority.charAt(0).toUpperCase() + priority.slice(1)}
+                  :
+                </Typography>
+                <Typography level='body1'>
+                  {new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  }).format(envelopesBalance)}
+                </Typography>
+              </>
             )}
           </Skeleton>
         </div>
-        <Skeleton loading={loading}>
+
+        {!loading && (
           <Button
             startDecorator={<MdAdd />}
             onClick={() => setOpen(true)}>
             New envelope
           </Button>
-        </Skeleton>
+        )}
 
-        <Modal
+        <CreateEnvelopeModal
+          loading={loading}
+          setLoading={setLoading}
+          newEnvelope={newEnvelope}
+          setNewEnvelope={setNewEnvelope}
+          envelopes={envelopes}
+          setEnvelopes={setEnvelopes}
           open={open}
-          onClose={() => setOpen(false)}>
-          <EnvelopeForm
-            color='neutral'
-            layout='center'
-            size='md'
-            variant='outlined'
-            aria-labelledby='basic-modal-dialog-title'
-            aria-describedby='basic-modal-dialog-description'
-            sx={{ maxWidth: 500 }}>
-            <Skeleton loading={loading}>
-              <Typography
-                id='basic-modal-dialog-title'
-                component='h2'>
-                Create a new envelope
-              </Typography>
-            </Skeleton>
-
-            <Skeleton loading={loading}>
-              <Typography
-                id='basic-modal-dialog-description'
-                textColor='text.tertiary'>
-                Fill in the information of the envelope.
-              </Typography>
-            </Skeleton>
-
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                setSubmitting(true);
-                setLoading(true);
-              }}>
-              <Stack spacing={5}>
-                <FormControl>
-                  <Skeleton loading={loading}>
-                    <FormLabel>Name</FormLabel>
-                  </Skeleton>
-
-                  <Skeleton loading={loading}>
-                    <Input
-                      autoFocus
-                      required
-                      type='text'
-                      onChange={(event) => {
-                        setNewEnvelope({
-                          ...newEnvelope,
-                          name: event.target.value,
-                        });
-                      }}
-                    />
-                  </Skeleton>
-                </FormControl>
-                <FormControl>
-                  <Skeleton loading={loading}>
-                    <FormLabel>Amount</FormLabel>
-                  </Skeleton>
-
-                  <Skeleton loading={loading}>
-                    <Input
-                      autoFocus
-                      required
-                      type='number'
-                      onChange={(event) => {
-                        setNewEnvelope({
-                          ...newEnvelope,
-                          amount: event.target.value,
-                        });
-                      }}
-                    />
-                  </Skeleton>
-                </FormControl>
-                <FormControl>
-                  <Skeleton loading={loading}>
-                    <FormLabel>Notes</FormLabel>
-                  </Skeleton>
-
-                  <Skeleton loading={loading}>
-                    <Textarea
-                      minRows={2}
-                      onChange={(event) => {
-                        setNewEnvelope({
-                          ...newEnvelope,
-                          notes: event.target.value,
-                        });
-                      }}
-                    />
-                  </Skeleton>
-                </FormControl>
-
-                <Skeleton loading={loading}>
-                  <Button type='submit'>Submit</Button>
-                </Skeleton>
-
-                <Skeleton loading={loading}>
-                  <CancelButton
-                    color='danger'
-                    onClick={() => {
-                      setOpen(false);
-                    }}>
-                    Cancel
-                  </CancelButton>
-                </Skeleton>
-              </Stack>
-            </form>
-          </EnvelopeForm>
-        </Modal>
+          setOpen={setOpen}
+          submitting={submitting}
+          setSubmitting={setSubmitting}
+          updateProps={updateProps}
+          setUpdateProps={setUpdateProps}
+        />
       </div>
       <Container
         container
@@ -301,60 +275,40 @@ export default function Envelopes() {
       </Container>
 
       <Skeleton loading={loading}>
-        <Grid
-          container
-          spacing={2}
-          sx={{ flexGrow: 1 }}
-          direction={'column'}>
-          {!loading && !submitting && (
-            <>
-              {envelopes.map((item) => {
+        {!loading && !submitting && (
+          <Grid
+            container
+            spacing={2}
+            sx={{ flexGrow: 1 }}
+            direction={'column'}>
+            {currentPriorityGroup !== null && priority !== null && (
+              <PriorityGroup
+                group={currentPriorityGroup}
+                loading={loading}
+                groupName={priority.charAt(0).toUpperCase() + priority.slice(1)}
+                color={priorityColor}
+              />
+            )}
+            {currentPriorityGroup === null &&
+              priority === null &&
+              allPriorityGroups.map((group, index) => {
+                if (group.group.length === 0) return;
                 return (
-                  <Container
-                    key={item.id}
-                    container
-                    spacing={2}
-                    sx={{ flexGrow: 1 }}>
-                    <Grid
-                      xs={12}
-                      className={spacingStyles.marginBottomXxs}>
-                      <h3 className={textStyles.headingSmAlt}>{item.name}</h3>
-                    </Grid>
-                    <Grid xs={4}>
-                      <p className={textStyles.paragraphSm}>
-                        {new Intl.NumberFormat('en-US', {
-                          style: 'currency',
-                          currency: 'USD',
-                        }).format(item.amount)}
-                      </p>
-                    </Grid>
-                    <Grid xs={4}>
-                      <p className={textStyles.paragraphSm}>
-                        {new Intl.NumberFormat('en-US', {
-                          style: 'currency',
-                          currency: 'USD',
-                        }).format(item.amount_left)}
-                      </p>
-                    </Grid>
-                    <Grid xs={3}>
-                      <p className={textStyles.paragraphSm}>
-                        {new Intl.NumberFormat('en-US', {
-                          style: 'currency',
-                          currency: 'USD',
-                        }).format(item.amount_spent)}
-                      </p>
-                    </Grid>
-                    <Grid
-                      xs={1}
-                      className={textStyles.editIcon}>
-                      <MdEdit />
-                    </Grid>
-                  </Container>
+                  <PriorityGroup
+                    key={index}
+                    group={group.group}
+                    loading={loading}
+                    groupName={group.groupName}
+                    color={group.color}
+                    updateProps={updateProps}
+                    setUpdateProps={setUpdateProps}
+                    setOpen={setOpen}
+                    open={open}
+                  />
                 );
               })}
-            </>
-          )}
-        </Grid>
+          </Grid>
+        )}
       </Skeleton>
     </div>
   );

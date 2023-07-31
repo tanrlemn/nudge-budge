@@ -1,5 +1,5 @@
 // styles
-import styles from './styles/dashboard.module.css';
+import styles from '../styles/dashboard.module.css';
 
 // server
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
@@ -7,7 +7,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 // components
-import TopEnvelopes from './components/topEnvelopes';
+import Envelopes from '../components/envelopes';
 
 export default async function Dashboard() {
   const supabase = createServerComponentClient({ cookies });
@@ -22,7 +22,7 @@ export default async function Dashboard() {
 
   return (
     <div className={styles.dashboardWrap}>
-      <TopEnvelopes />
+      <Envelopes />
     </div>
   );
 }
