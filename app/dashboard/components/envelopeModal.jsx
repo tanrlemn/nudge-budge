@@ -38,7 +38,7 @@ const CancelButton = styled(Link)(({ theme }) => ({
   display: 'block',
 }));
 
-export default function CreateEnvelopeModal({
+export default function EnvelopeModal({
   newEnvelope,
   setNewEnvelope,
   envelopes,
@@ -49,6 +49,7 @@ export default function CreateEnvelopeModal({
   setSubmitting,
   setLoading,
   updateProps,
+  setUpdateProps,
 }) {
   const router = useRouter();
 
@@ -60,11 +61,9 @@ export default function CreateEnvelopeModal({
       setLoading(true);
       updateProps ? (newEnvelope.id = id) : null;
 
-      // const route = updateProps
-      //   ? '/api/envelopes/update'
-      //   : '/api/envelopes/create';
-
-      const route = '/api/envelopes/create';
+      const route = updateProps
+        ? '/api/envelopes/update'
+        : '/api/envelopes/create';
 
       const response = await fetch(route, {
         method: 'POST',
@@ -76,7 +75,18 @@ export default function CreateEnvelopeModal({
       const { envelope } = await response.json();
 
       if (envelope !== null) {
-        setEnvelopes([...envelopes, envelope[0]]);
+        if (updateProps) {
+          const updatedEnvelopes = envelopes.map((e) => {
+            if (e.id === envelope[0].id) {
+              return envelope[0];
+            }
+            return e;
+          });
+          setEnvelopes(updatedEnvelopes);
+          setUpdateProps(null);
+        } else {
+          setEnvelopes([...envelopes, envelope[0]]);
+        }
       }
       setOpen(false);
       setLoading(false);
@@ -93,7 +103,10 @@ export default function CreateEnvelopeModal({
   return (
     <Modal
       open={open}
-      onClose={() => setOpen(false)}>
+      onClose={(_event) => {
+        setUpdateProps(null);
+        setOpen(false);
+      }}>
       <EnvelopeForm
         color='neutral'
         layout='center'

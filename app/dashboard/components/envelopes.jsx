@@ -6,8 +6,11 @@ import spacingStyles from '@/app/styles/spacing.module.css';
 import styles from '../styles/dashboard.module.css';
 import { styled } from '@mui/joy/styles';
 
+// context
+import { LoadingContext } from '@/app/context/LoadingContext';
+
 // hooks
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 // components
@@ -21,7 +24,7 @@ import {
   Chip,
   ChipDelete,
 } from '@mui/joy';
-import CreateEnvelopeModal from './createEnvelopeModal';
+import EnvelopeModal from './envelopeModal';
 import PriorityGroup from './priorityGroup';
 
 const Item = styled(Sheet)(({ theme }) => ({
@@ -39,6 +42,8 @@ const Container = styled(Grid)(({ theme }) => ({
 }));
 
 export default function Envelopes() {
+  const { loading, setLoading } = useContext(LoadingContext);
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const priority = searchParams.get('priority');
@@ -50,12 +55,12 @@ export default function Envelopes() {
   const [updateProps, setUpdateProps] = useState(null);
   const [envelopesBalance, setEnvelopesBalance] = useState(0);
 
-  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [newEnvelope, setNewEnvelope] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetchEnvelopes = async () => {
       const response = await fetch('/api/envelopes', {
         method: 'GET',
@@ -140,6 +145,7 @@ export default function Envelopes() {
       let balance = 0;
       if (!group) {
         envelopes.map((item) => {
+          if (item.priority_id !== 5) return;
           balance += item.amount;
         });
       } else {
@@ -165,7 +171,7 @@ export default function Envelopes() {
       {priority !== null && (
         <div className={spacingStyles.marginBottomSm}>
           <Chip
-            variant='outlined'
+            variant='soft'
             color={priorityColor}
             onClick={() => router.push('/dashboard/envelopes')}
             endDecorator={
@@ -223,7 +229,7 @@ export default function Envelopes() {
           </Button>
         )}
 
-        <CreateEnvelopeModal
+        <EnvelopeModal
           loading={loading}
           setLoading={setLoading}
           newEnvelope={newEnvelope}
@@ -291,6 +297,7 @@ export default function Envelopes() {
             )}
             {currentPriorityGroup === null &&
               priority === null &&
+              allPriorityGroups !== null &&
               allPriorityGroups.map((group, index) => {
                 if (group.group.length === 0) return;
                 return (

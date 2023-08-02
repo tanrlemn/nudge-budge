@@ -5,7 +5,10 @@ import { CssVarsProvider } from '@mui/joy/styles';
 import { Public_Sans } from 'next/font/google';
 
 // components
+import { Suspense } from 'react';
 import Header from './components/header';
+import LoadingProvider from './loading-provider';
+import Loading from './loading';
 
 const publicSans = Public_Sans({ subsets: ['latin'] });
 
@@ -21,8 +24,12 @@ export default async function RootLayout({ children }) {
       defaultMode='dark'>
       <html lang='en'>
         <body className={publicSans.className}>
-          <Header />
-          {children}
+          <Suspense fallback={<Loading />}>
+            <Header />
+            <div style={{ marginTop: '4rem' }}>
+              <LoadingProvider>{children}</LoadingProvider>
+            </div>
+          </Suspense>
         </body>
       </html>
     </CssVarsProvider>

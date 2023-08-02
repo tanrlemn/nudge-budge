@@ -5,20 +5,11 @@ import textStyles from '@/app/styles/typography.module.css';
 import spacingStyles from '@/app/styles/spacing.module.css';
 import styles from './styles/header.module.css';
 
-// server
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-
 // hooks
 import { useRouter } from 'next/navigation';
 
 export default function Auth({ loggedIn }) {
   const router = useRouter();
-  const supabase = createClientComponentClient();
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-  };
 
   return (
     <>
@@ -41,13 +32,6 @@ export default function Auth({ loggedIn }) {
             Sign up
           </button>
         </div>
-      )}
-      {loggedIn && (
-        <button
-          onClick={handleSignOut}
-          className={textStyles.headerButton}>
-          Sign out
-        </button>
       )}
     </>
   );

@@ -2,10 +2,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 2rem 1.5rem;
   height: 50px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-bottom: var(--gray-border-sm);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--gray-darkest);
+  z-index: 100;
 }
 
 .headerButtonsWrap {
@@ -16,7 +22,7 @@
 .headerProfileWrap {
   display: flex;
   align-items: center;
-  margin-right: 1rem;
+  padding: 0.1rem 0.75rem;
 }
 
 .headerProfileImage {

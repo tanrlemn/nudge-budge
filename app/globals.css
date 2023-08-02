@@ -26,9 +26,13 @@
 
   /* Blues */
   --blue: #1969ff;
+  --blue-10: #1969ff1c;
 
   /* Purples */
+  --purple-lighter: #c298e8;
+  --purple-light: #b06aee;
   --purple: #9426fb;
+  --purple-darker: #580e9c;
 
   /* Pinks */
 

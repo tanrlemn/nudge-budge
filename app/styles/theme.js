@@ -2,8 +2,36 @@
 
 import { extendTheme } from '@mui/joy/styles';
 
+const palette = {
+  info: {
+    solidBg: '#9426fb',
+    solidBorder: '#9426fb', //main
+    solidHoverBg: '#580e9c', // darker
+    solidHoverBorder: '#580e9c',
+    solidActiveBg: '#580e9c',
+    solidActiveBorder: '#580e9c',
+    solidDisabledBg: '#9426fb',
+    solidDisabledBorder: '#9426fb',
+    // btn-light
+    softColor: '#17171b',
+    softBg: '#c298e8',
+    softBorder: '#c298e8',
+    softHoverBg: '#b06aee',
+    softHoverBorder: '#b06aee',
+    softActiveBg: '#b06aee',
+    softActiveBorder: '#b06aee',
+    softDisabledBg: '#c298e8',
+    softDisabledBorder: '#c298e8',
+    500: '#9426fb',
+  },
+};
+
 export const nudgeBudgeTheme = extendTheme({
   spacing: (factor) => `${0.25 * factor}rem`,
+  colorSchemes: {
+    light: { palette },
+    dark: { palette },
+  },
   focus: {
     default: {
       outlineWidth: '3px',
