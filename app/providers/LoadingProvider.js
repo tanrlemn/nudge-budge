@@ -1,13 +1,10 @@
 'use client';
 
 // context
-import { LoadingContext } from './context/LoadingContext';
+import { LoadingContext } from '../context/LoadingContext';
 
 // hooks
-import { useState, useEffect } from 'react';
-
-// components
-import Loading from './loading';
+import { useState } from 'react';
 
 export default function LoadingProvider({ children }) {
   const [loading, setLoading] = useState(true);

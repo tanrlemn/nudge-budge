@@ -9,6 +9,8 @@ import { redirect } from 'next/navigation';
 // components
 import TopEnvelopes from './components/topEnvelopes';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Dashboard() {
   const supabase = createServerComponentClient({ cookies });
 

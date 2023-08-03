@@ -7,11 +7,12 @@ import { cookies } from 'next/headers';
 
 // components
 import Link from 'next/link';
-
-// local components
 import Auth from './handleAuth';
 import HeaderMenu from './headerMenu';
 import ProfileMenu from './profileMenu';
+import Logo from './logo';
+
+export const dynamic = 'force-dynamic';
 
 export default async function Header() {
   const supabase = createServerComponentClient({ cookies });
@@ -26,8 +27,11 @@ export default async function Header() {
   return (
     <div className={styles.headerWrap}>
       <HeaderMenu session={session} />
-      <Link href={logoLink}>
-        <div>NudgeBudge</div>
+
+      <Link
+        href={logoLink}
+        className={styles.logo}>
+        <Logo />
       </Link>
       <div className={styles.headerButtonsWrap}>
         {session !== null && profileData !== null && (

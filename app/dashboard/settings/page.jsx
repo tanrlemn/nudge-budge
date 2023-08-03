@@ -1,1 +1,0 @@
-<PlaidLink session={session} />;

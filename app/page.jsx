@@ -4,6 +4,8 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'NudgeBudge',
   description: 'A dynamic budgeting system for the modern age.',

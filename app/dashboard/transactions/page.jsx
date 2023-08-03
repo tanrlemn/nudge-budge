@@ -7,7 +7,9 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 // components
-import Envelopes from '../components/envelopes';
+import Transactions from '../components/transactions';
+
+export const dynamic = 'force-dynamic';
 
 export default async function Dashboard() {
   const supabase = createServerComponentClient({ cookies });
@@ -22,7 +24,7 @@ export default async function Dashboard() {
 
   return (
     <div className={styles.dashboardWrap}>
-      <Envelopes />
+      <Transactions />
     </div>
   );
 }

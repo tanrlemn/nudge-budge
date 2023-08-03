@@ -24,8 +24,9 @@ import {
   Chip,
   ChipDelete,
 } from '@mui/joy';
-import EnvelopeModal from './envelopeModal';
+import TransactionModal from './transactionModal';
 import PriorityGroup from './priorityGroup';
+import { set } from 'animejs';
 
 const Item = styled(Sheet)(({ theme }) => ({
   backgroundColor: 'transparent',
@@ -41,7 +42,7 @@ const Container = styled(Grid)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
 }));
 
-export default function Envelopes() {
+export default function Transactions() {
   const { loading, setLoading } = useContext(LoadingContext);
 
   const router = useRouter();
@@ -51,100 +52,40 @@ export default function Envelopes() {
   const [priorityColor, setPriorityColor] = useState(null);
   const [allPriorityGroups, setAllPriorityGroups] = useState(null);
 
-  const [envelopes, setEnvelopes] = useState(null);
+  const [transactions, setTransactions] = useState(null);
   const [updateProps, setUpdateProps] = useState(null);
-  const [envelopesBalance, setEnvelopesBalance] = useState(0);
+  const [transactionsBalance, setTransactionsBalance] = useState(0);
 
   const [open, setOpen] = useState(false);
-  const [newEnvelope, setNewEnvelope] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [newTransaction, setNewTransaction] = useState(null);
 
   useEffect(() => {
     setLoading(true);
-    const fetchEnvelopes = async () => {
-      const response = await fetch('/api/envelopes', {
+    const fetchTransactions = async () => {
+      const response = await fetch('/api/transactions', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      const { envelopes } = await response.json();
+      const { transactions } = await response.json();
 
-      setEnvelopes(await envelopes);
+      setTransactions(await transactions);
     };
 
-    const disperseEnvelopes = () => {
+    const disperseTransactions = () => {
       const necessitiesArr = [];
       const pressingArr = [];
       const savingsArr = [];
       const discretionaryArr = [];
       const incomeArr = [];
-
-      envelopes.map((item) => {
-        if (item.priority_id === 4) {
-          savingsArr.push(item);
-        } else if (item.priority_id === 1) {
-          necessitiesArr.push(item);
-        } else if (item.priority_id === 2) {
-          pressingArr.push(item);
-        } else if (item.priority_id === 3) {
-          discretionaryArr.push(item);
-        } else if (item.priority_id === 5) {
-          incomeArr.push(item);
-        }
-      });
-
-      if (priority === null) {
-        setPriorityColor(null);
-        setCurrentPriorityGroup(null);
-        calculateEnvelopesBalance();
-      } else if (priority === 'savings') {
-        setPriorityColor('info');
-        setCurrentPriorityGroup(savingsArr);
-        calculateEnvelopesBalance(savingsArr);
-      } else if (priority === 'necessities') {
-        setPriorityColor('danger');
-        setCurrentPriorityGroup(necessitiesArr);
-        calculateEnvelopesBalance(necessitiesArr);
-      } else if (priority === 'pressing') {
-        setPriorityColor('warning');
-        setCurrentPriorityGroup(pressingArr);
-        calculateEnvelopesBalance(pressingArr);
-      } else if (priority === 'discretionary') {
-        setPriorityColor('primary');
-        setCurrentPriorityGroup(discretionaryArr);
-        calculateEnvelopesBalance(discretionaryArr);
-      } else if (priority === 'income') {
-        setPriorityColor('success');
-        setCurrentPriorityGroup(incomeArr);
-        calculateEnvelopesBalance(incomeArr);
-      }
-
-      setAllPriorityGroups([
-        { group: savingsArr, color: 'info', groupName: 'Savings' },
-        {
-          group: necessitiesArr,
-          color: 'danger',
-          groupName: 'Necessities',
-        },
-        {
-          group: pressingArr,
-          color: 'warning',
-          groupName: 'Pressing',
-        },
-        {
-          group: discretionaryArr,
-          color: 'primary',
-          groupName: 'Discretionary',
-        },
-        { group: incomeArr, color: 'success', groupName: 'Income' },
-      ]);
     };
 
-    const calculateEnvelopesBalance = (group) => {
+    const calculateTransactionsBalance = (group) => {
       let balance = 0;
       if (!group) {
-        envelopes.map((item) => {
+        transactions.map((item) => {
           if (item.priority_id !== 5) return;
           balance += item.amount;
         });
@@ -153,18 +94,17 @@ export default function Envelopes() {
           balance += item.amount;
         });
       }
-      setEnvelopesBalance(balance);
+      setTransactionsBalance(balance);
     };
 
-    if (envelopes === null) {
-      fetchEnvelopes();
+    if (transactions === null) {
+      fetchTransactions();
     }
 
-    if (envelopes !== null) {
-      disperseEnvelopes();
+    if (transactions !== null) {
       setLoading(false);
     }
-  }, [envelopes, submitting, newEnvelope, priority]);
+  }, [transactions, submitting, newTransaction, priority]);
 
   return (
     <div>
@@ -173,9 +113,11 @@ export default function Envelopes() {
           <Chip
             variant='soft'
             color={priorityColor}
-            onClick={() => router.push('/dashboard/envelopes')}
+            onClick={() => router.push('/dashboard/transactions')}
             endDecorator={
-              <ChipDelete onClick={() => router.push('/dashboard/envelopes')} />
+              <ChipDelete
+                onClick={() => router.push('/dashboard/transactions')}
+              />
             }>
             {priority.charAt(0).toUpperCase() + priority.slice(1)}
           </Chip>
@@ -190,7 +132,7 @@ export default function Envelopes() {
               level='h1'>
               <Typography level='h3'>
                 {priority === null
-                  ? 'All Envelopes'
+                  ? 'All Transactions'
                   : priority.charAt(0).toUpperCase() + priority.slice(1)}
               </Typography>
             </Skeleton>
@@ -206,15 +148,9 @@ export default function Envelopes() {
                   gutterBottom={true}>
                   Total budget for{' '}
                   {priority === null
-                    ? ' all envelopes'
+                    ? ' all transactions'
                     : priority.charAt(0).toUpperCase() + priority.slice(1)}
                   :
-                </Typography>
-                <Typography level='body1'>
-                  {new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                  }).format(envelopesBalance)}
                 </Typography>
               </>
             )}
@@ -225,17 +161,16 @@ export default function Envelopes() {
           <Button
             startDecorator={<MdAdd />}
             onClick={() => setOpen(true)}>
-            New envelope
+            New transaction
           </Button>
         )}
-
-        <EnvelopeModal
+        <TransactionModal
           loading={loading}
           setLoading={setLoading}
-          newEnvelope={newEnvelope}
-          setNewEnvelope={setNewEnvelope}
-          envelopes={envelopes}
-          setEnvelopes={setEnvelopes}
+          newTransaction={newTransaction}
+          setNewTransaction={setNewTransaction}
+          transactions={transactions}
+          setTransactions={setTransactions}
           open={open}
           setOpen={setOpen}
           submitting={submitting}
@@ -279,44 +214,6 @@ export default function Envelopes() {
           </Grid>
         </Skeleton>
       </Container>
-
-      <Skeleton loading={loading}>
-        {!loading && !submitting && (
-          <Grid
-            container
-            spacing={2}
-            sx={{ flexGrow: 1 }}
-            direction={'column'}>
-            {currentPriorityGroup !== null && priority !== null && (
-              <PriorityGroup
-                group={currentPriorityGroup}
-                loading={loading}
-                groupName={priority.charAt(0).toUpperCase() + priority.slice(1)}
-                color={priorityColor}
-              />
-            )}
-            {currentPriorityGroup === null &&
-              priority === null &&
-              allPriorityGroups !== null &&
-              allPriorityGroups.map((group, index) => {
-                if (group.group.length === 0) return;
-                return (
-                  <PriorityGroup
-                    key={index}
-                    group={group.group}
-                    loading={loading}
-                    groupName={group.groupName}
-                    color={group.color}
-                    updateProps={updateProps}
-                    setUpdateProps={setUpdateProps}
-                    setOpen={setOpen}
-                    open={open}
-                  />
-                );
-              })}
-          </Grid>
-        )}
-      </Skeleton>
     </div>
   );
 }

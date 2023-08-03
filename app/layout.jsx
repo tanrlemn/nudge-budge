@@ -1,13 +1,12 @@
 // styles
 import './globals.css';
-import { nudgeBudgeTheme } from './styles/theme';
-import { CssVarsProvider } from '@mui/joy/styles';
 import { Public_Sans } from 'next/font/google';
+import JoyProvider from './providers/JoyProvider';
 
 // components
 import { Suspense } from 'react';
 import Header from './components/header';
-import LoadingProvider from './loading-provider';
+import LoadingProvider from './providers/LoadingProvider';
 import Loading from './loading';
 
 const publicSans = Public_Sans({ subsets: ['latin'] });
@@ -19,9 +18,7 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   return (
-    <CssVarsProvider
-      theme={nudgeBudgeTheme}
-      defaultMode='dark'>
+    <JoyProvider>
       <html lang='en'>
         <body className={publicSans.className}>
           <Suspense fallback={<Loading />}>
@@ -32,6 +29,6 @@ export default async function RootLayout({ children }) {
           </Suspense>
         </body>
       </html>
-    </CssVarsProvider>
+    </JoyProvider>
   );
 }

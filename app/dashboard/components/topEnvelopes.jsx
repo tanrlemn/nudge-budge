@@ -161,7 +161,7 @@ export default function TopEnvelopes() {
           <Skeleton loading={loading}>
             <Button
               variant='plain'
-              color='info'
+              color='primary'
               size='sm'
               onClick={() => router.push('/dashboard/envelopes')}>
               View all envelopes
